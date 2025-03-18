@@ -1,30 +1,36 @@
+from functools import partial
 import tkinter as tk
 import baseGUI as gui
+import fileexp as ex
 
-class Page1(gui.Page):
+def rom_exists():
+    '''
+    Check if rom exists in the filepath.
+    '''
+    try:
+        f = open('Super Mario Bros. (JU) (PRG0) [!].nes')
+        f.close()
+    except:
+        win.switchToPage("file")
+
+class Start(gui.Page):
     def __init__(self, root):
-        desc= '''Welcome to the builder wizard for the Super Mario Bros. C recompilation, "Super Mario Bros. C Plus".
-Please enter the file path for your Super Mario Bros. ROM below.'''
+        desc= '''Welcome to the setup wizard for the Super Mario Bros. recompilation, "Super Mario Bros. C Plus".
+Please press "Next" to proceed with the setup.'''
         elements = [
             gui.Element(tk.Label(root,
-                            text='Super Mario Bros C Plus Builder',
+                            text='Super Mario Bros C Plus Setup Wizard',
                             pady=15,
                             font=("TkDefaultFont", 15)),
-                            {"row": 0, "column": 0, "columnspan": 2}
+                            {"row": 0, "column": 0}
                         ),
             gui.Element(tk.Label(root,
                             text= desc),
-                            {"row": 1, "column": 0, "columnspan": 2}),
-            gui.Element(tk.Entry(root,
-                                justify='right'),
-                            {"row": 2, "column": 0, "sticky": "e"}
-                        ),
+                            {"row": 1, "column": 0}),
             gui.Element(tk.Button(root,
-                                text='Browse...',
-                                anchor='w',
-                                justify='left'),
-                            {"row": 2, "column": 1, "sticky": "w"}
-                        )
+                            text= "Next",
+                            command= partial(rom_exists)),
+                            {"row": 2, "column": 0, "sticky": "se"})
         ] 
         super().__init__(elements)
 
@@ -32,6 +38,7 @@ root = tk.Tk(screenName=None, baseName=None, className='Tk', useTk=1)
 root.title('Super Mario Bros. C Plus Builder')
 win = gui.MainWindow(root)
 win.initPages({
-    "p1": Page1(root)
+    "start": Start(root),
+    "file": ex.FilePage(root)
 })
-win.switchToPage("p1")
+win.switchToPage("start")
