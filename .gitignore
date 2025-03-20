@@ -3,3 +3,4 @@ build/
 *.pal
 smbc.conf
 __pycache__
+Makefile
